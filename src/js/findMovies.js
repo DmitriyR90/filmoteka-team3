@@ -146,7 +146,7 @@ function checkPosition() {
 
 window.addEventListener('scroll', checkPosition);
 
-function createImg(poster_path) {
+export function createImg(poster_path) {
   let noposter = new Image();
   noposter.src = require('../images/noposter.jpg');
   let posterPath = `https://image.tmdb.org/t/p/w300${poster_path}`;
@@ -305,7 +305,7 @@ export function createModalCard(movie) {
                 </div>`;
 }
 
-function createModalGenresString(genres) {
+export function createModalGenresString(genres) {
   return genres.map(genre => genre.name).join(', ');
 }
 
