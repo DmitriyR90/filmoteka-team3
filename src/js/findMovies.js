@@ -20,6 +20,11 @@ const loadSpinner = document.querySelector('.loading-container');
 
 loadSpinner.classList.add('is-hidden__spinner');
 showMovies(createCurrentUrl(pageNumber));
+let loader = new lv();
+loader.startObserving();
+// with assignment to variable
+let element = lv.create(document.getElementById('#spinner'));
+
 
 
 searchButtonEl.addEventListener('click', loadMovies);
