@@ -1,1 +1,0 @@
-{"mappings":"AAAkBA,SAASC,cAAc,SAC/BC,UAAUC,OAAO","sources":["src/js/renderLibrary.js"],"sourcesContent":["const emptyInfo = document.querySelector('.info');\nemptyInfo.classList.remove(`is-hidden`);\n"],"names":["document","querySelector","classList","remove"],"version":3,"file":"librarypage.40bb0453.js.map"}
