@@ -24,7 +24,7 @@ let loader = new lv();
 loader.startObserving();
 // with assignment to variable
 let element = lv.create(document.getElementById('#spinner'));
-
+element.hide();
 
 
 searchButtonEl.addEventListener('click', loadMovies);
@@ -86,7 +86,8 @@ function loadMovies(e) {
     if (check) {
         pageNumber = 1;
         searchingFlag = true;  
-        loadSpinner.classList.remove('is-hidden__spinner');
+        // loadSpinner.classList.remove('is-hidden__spinner');
+        element.show();
         showMovies(createSearchingUrl(requestMovie, pageNumber));
     }    
 }
@@ -103,7 +104,8 @@ function showMovies(url) {
                 clearPage();                
                 totalpages = movies.total_pages;
                 puginationNumeration(pageNumber, totalpages);      
-                loadSpinner.classList.add('is-hidden__spinner');
+                // loadSpinner.classList.add('is-hidden__spinner');
+                element.hide();
                 movieListEl.insertAdjacentHTML('beforeend', createMoviesList(movies));
                 
             }
@@ -173,7 +175,8 @@ function clearPage() {
 
 function showNotFoundNotification() {
     document.querySelector('.not-found-notification').classList.remove('disabled');
-    loadSpinner.classList.add('is-hidden__spinner');
+    // loadSpinner.classList.add('is-hidden__spinner');
+    element.hide();
 }
 
 function clearNotFoundNotification() {
