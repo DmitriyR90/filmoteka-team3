@@ -99,7 +99,6 @@ function showMovies(url) {
             console.log(movies);
 
             checkforNotFoundNotification(movies.results === undefined || movies.results.length < 1);
-            
             if (movies.results.length !== 0) {
                 clearPage();                
                 totalpages = movies.total_pages;
