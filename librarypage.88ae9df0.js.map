@@ -1,1 +1,0 @@
-{"mappings":"YAAA,IAAMA,EAAaC,SAASC,cAAc,eAC1CC,QAAQC,IAAIJ,G","sources":["src/js/renderLibrary.js"],"sourcesContent":["const pagination = document.querySelector('.pagination');\nconsole.log(pagination);\n"],"names":["$de0794a6052de9d2$var$pagination","document","querySelector","console","log"],"version":3,"file":"librarypage.88ae9df0.js.map"}
