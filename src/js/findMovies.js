@@ -1,5 +1,5 @@
 import { genres } from '../genres.json';
-import { showModal, closeModal } from './film-modal';
+import { showModal, closeModal, findMovieUrl } from './film-modal';
 
 export const API_URL = 'https://api.themoviedb.org/3/';
 export const API_KEY = 'afc22cf5c573169849cabd6217d3b7d3';
@@ -30,6 +30,7 @@ showMovies(createCurrentUrl(pageNumber));
 searchButtonEl.addEventListener('click', loadMovies);
 inputEl.addEventListener('input', serchingParametr);
 movieListEl.addEventListener('click', showModal);
+movieListEl.addEventListener('click', findMovieUrl);
 closeModalBtn.addEventListener('click', () => closeModal());
 document.addEventListener('keydown', e => {
   if (e.code === 'Escape') {
