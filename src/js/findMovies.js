@@ -21,13 +21,16 @@ const arrowRightBtn = document.querySelector('.pagination-btn__arrow-right');
 const paginationNumbers = document.querySelector('.pagination-list');
 const pagination = document.querySelector('.pagination');
 const loadSpinner = document.querySelector('.loader');
+const filmoteka = document.querySelector('.logo');
 getCurentPageFunction();
 formEl.addEventListener('submit', e => {
   e.preventDefault();
 });
 
 showMovies(createCurrentUrl(pageNumber));
-
+filmoteka.addEventListener('click', () => {
+  sessionStorage.removeItem('current-page');
+});
 
 searchButtonEl.addEventListener('click', loadMovies);
 inputEl.addEventListener('input', serchingParametr);
