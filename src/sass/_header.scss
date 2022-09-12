@@ -11,6 +11,29 @@
   color: #ffffff;
 }
 
+.header__ui-theme {
+  background-color: #fff;
+  margin-right: auto;
+  margin-left: 30px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover,
+  &:focus {
+    background-color: rgb(233, 233, 233);
+  }
+}
+.header__svg {
+  fill: #ff6b08;
+  width: 18px;
+  height: 18px;
+}
+
 .header-home {
   background-color: #000000;
   background-image: url(../images/mobile-header-img-1x.jpg);
@@ -94,9 +117,10 @@
   border-radius: 5px;
   cursor: pointer;
   transition: 0.3s;
-    &:hover, &:focus {
-      color:rgba(255, 255, 255, 0.4);
-    }
+  &:hover,
+  &:focus {
+    color: rgba(255, 255, 255, 0.4);
+  }
 }
 
 .nav__item::after {
@@ -115,15 +139,17 @@
 .nav__link {
   text-transform: uppercase;
   color: inherit;
-  
 }
 
-.home, .library, .sing-in {
-   color: inherit;
+.home,
+.library,
+.sing-in {
+  color: inherit;
   transition: 0.3s;
-    &:hover, &:focus {
-      color:rgba(255, 255, 255, 0.4);
-    }
+  &:hover,
+  &:focus {
+    color: rgba(255, 255, 255, 0.4);
+  }
 }
 
 .header__input-thumb {
@@ -205,8 +231,9 @@
 
     color: #ffffff;
     transition: 0.3s;
-    &:hover, &:focus {
-      color:rgba(255, 255, 255, 0.4);
+    &:hover,
+    &:focus {
+      color: rgba(255, 255, 255, 0.4);
     }
   }
 
