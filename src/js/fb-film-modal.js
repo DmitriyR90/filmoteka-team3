@@ -1,16 +1,35 @@
 import { API_KEY, API_URL, createImg, checkAndCreateDate } from './findMovies';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, getDoc, exists, onSnapshot, updateDoc, arrayUnion, collection, query, where, getDocs, arrayRemove } from 'firebase/firestore/lite';
-import { getAuth, showLoginError, onAuthStateChanged, AuthErrorCodes } from 'firebase/auth';
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  exists,
+  onSnapshot,
+  updateDoc,
+  arrayUnion,
+  collection,
+  query,
+  where,
+  getDocs,
+  arrayRemove,
+} from 'firebase/firestore/lite';
+import {
+  getAuth,
+  showLoginError,
+  onAuthStateChanged,
+  AuthErrorCodes,
+} from 'firebase/auth';
 import './firebase';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBQAPWu6PN62rmzf-LlZS504qxL8csmmBc",
-    authDomain: "filmoteka-bdb19.firebaseapp.com",
-    projectId: "filmoteka-bdb19",
-    storageBucket: "filmoteka-bdb19.appspot.com",
-    messagingSenderId: "1051248700372",
-    appId: "1:1051248700372:web:2dc6796345cd1c6fa94441"
+  apiKey: 'AIzaSyBQAPWu6PN62rmzf-LlZS504qxL8csmmBc',
+  authDomain: 'filmoteka-bdb19.firebaseapp.com',
+  projectId: 'filmoteka-bdb19',
+  storageBucket: 'filmoteka-bdb19.appspot.com',
+  messagingSenderId: '1051248700372',
+  appId: '1:1051248700372:web:2dc6796345cd1c6fa94441',
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -35,97 +54,104 @@ export async function showModal(e) {
   await fetch(url)
     .then(response => response.json())
     .then(movie => {
-      
-        document
+      document
         .querySelector('.modal-thumb')
         .insertAdjacentHTML('beforeend', createModalCard(movie));
-        document.querySelector('body').classList.add('overflow-hidden');
+      document.querySelector('body').classList.add('overflow-hidden');
 
-      
-        addToLibrBtn = document.querySelector('.add-watched-btn');
-        addToQueueBtn = document.querySelector('.add-queue-btn');
+      addToLibrBtn = document.querySelector('.add-watched-btn');
+      addToQueueBtn = document.querySelector('.add-queue-btn');
 
-        function addToLibrary(e) { // додає дані до firestore
-            const arrayName = e.target.id; // масив до якого треба дод дані, відповідно до того по якій кнопці нажали
-            // const textContent = e.target.textContent //доступ до текстового контенту на кнопці
-        
-            const movieItem = {
-                id: movie.id,
-                title: movie.title,
-                img: createImg(movie.poster_path),
-                vote_average: movie.vote_average,
-                vote_count: movie.vote_count,
-                popularity: movie.popularity,
-                original_title: movie.original_title,
-                genres: createModalGenresString(movie.genres),
-                overview: movie.overview,
-                date: checkAndCreateDate(movie.release_date),
-            }  
-            
-            onAuthStateChanged(auth, (user) => { //перевіряємо чи користувач залогінений
-                if (user) {
-                    // User is signed in, see docs for a list of available properties
-                    const uid = user.uid; //id користувача
-                    //   Оновлюємо дані 
-                    updateDoc(doc(firestore, 'users', `${uid}`), {  //записуємо дані в firestore
+      function addToLibrary(e) {
+        // додає дані до firestore
+        const arrayName = e.target.id; // масив до якого треба дод дані, відповідно до того по якій кнопці нажали
+        // const textContent = e.target.textContent //доступ до текстового контенту на кнопці
 
-                      // if(textContent === "Add to watched") {
-                      //    [arrayName]: arrayUnion(movieItem)  // додаємо об`єкт фільму до масиву
-                      // } else if (textContent === "Delete from watched") {
-                      //   [arrayName]: arrayRemove(movieItem)  // видаляємо об`єкт фільму з масиву
-                      // }
+        const movieItem = {
+          id: movie.id,
+          title: movie.title,
+          img: createImg(movie.poster_path),
+          vote_average: movie.vote_average,
+          vote_count: movie.vote_count,
+          popularity: movie.popularity,
+          original_title: movie.original_title,
+          genres: createModalGenresString(movie.genres),
+          overview: movie.overview,
+          date: checkAndCreateDate(movie.release_date),
+        };
 
-                      [arrayName]: arrayUnion(movieItem)  // додаємо об`єкт фільму до масиву (це треба буде видалити, якщо буде умова з іф)
-                       
-                    })
+        onAuthStateChanged(auth, user => {
+          //перевіряємо чи користувач залогінений
+          if (user) {
+            // User is signed in, see docs for a list of available properties
+            const uid = user.uid; //id користувача
+            //   Оновлюємо дані
+            updateDoc(doc(firestore, 'users', `${uid}`), {
+              //записуємо дані в firestore
 
-                } else {
-                    console.log('user is logout');
-                    } 
-            })
-        }
+              // if(textContent === "Add to watched") {
+              //    [arrayName]: arrayUnion(movieItem)  // додаємо об`єкт фільму до масиву
+              // } else if (textContent === "Delete from watched") {
+              //   [arrayName]: arrayRemove(movieItem)  // видаляємо об`єкт фільму з масиву
+              // }
 
+              [arrayName]: arrayUnion(movieItem), // додаємо об`єкт фільму до масиву (це треба буде видалити, якщо буде умова з іф)
+            });
+          } else {
+            console.log('user is logout');
+          }
+        });
+      }
 
-  
+      // ----------------------------------------Видалення даних--------------------
 
-// ----------------------------------------Видалення даних--------------------
-         
-// function deleteFromLibrary(e) { // видаляє дані до firestore
-//   const arrayName = e.target.id; // масив з якого треба видалити дані, відповідно до того по якій кнопці нажали
+      // function deleteFromLibrary(e) { // видаляє дані до firestore
+      //   const arrayName = e.target.id; // масив з якого треба видалити дані, відповідно до того по якій кнопці нажали
 
-//   const movieItem = {
-//       id: movie.id,
-//       title: movie.title,
-//       img: createImg(movie.poster_path),
-//       vote_average: movie.vote_average,
-//       vote_count: movie.vote_count,
-//       popularity: movie.popularity,
-//       original_title: movie.original_title,
-//       genres: createModalGenresString(movie.genres),
-//       overview: movie.overview,
-//       date: checkAndCreateDate(movie.release_date),
-//   }  
-  
-//   onAuthStateChanged(auth, (user) => { //перевіряємо чи користувач залогінений
-//     if (user) {
-//         // User is signed in, see docs for a list of available properties
-//         const uid = user.uid; //id користувача
-//         //   Оновлюємо дані 
-//         updateDoc(doc(firestore, 'users', `${uid}`), {  //оновлюємо дані в firestore
-//             [arrayName]: arrayRemove(movieItem)  // видаляємо об`єкт фільму з масиву
-//         })
-  
-//     } else {
-//         console.log('user is logout');
-//         } 
-//   })
-// }
+      //   const movieItem = {
+      //       id: movie.id,
+      //       title: movie.title,
+      //       img: createImg(movie.poster_path),
+      //       vote_average: movie.vote_average,
+      //       vote_count: movie.vote_count,
+      //       popularity: movie.popularity,
+      //       original_title: movie.original_title,
+      //       genres: createModalGenresString(movie.genres),
+      //       overview: movie.overview,
+      //       date: checkAndCreateDate(movie.release_date),
+      //   }
 
-        addToLibrBtn.addEventListener('click', addToLibrary);
-        addToQueueBtn.addEventListener('click', addToLibrary);
-    
-    }).catch(error => console.log(error));
+      //   onAuthStateChanged(auth, (user) => { //перевіряємо чи користувач залогінений
+      //     if (user) {
+      //         // User is signed in, see docs for a list of available properties
+      //         const uid = user.uid; //id користувача
+      //         //   Оновлюємо дані
+      //         updateDoc(doc(firestore, 'users', `${uid}`), {  //оновлюємо дані в firestore
+      //             [arrayName]: arrayRemove(movieItem)  // видаляємо об`єкт фільму з масиву
+      //         })
 
+      //     } else {
+      //         console.log('user is logout');
+      //         }
+      //   })
+      // }
+
+      addToLibrBtn.addEventListener('click', addToLibrary);
+      addToQueueBtn.addEventListener('click', addToLibrary);
+    })
+    .catch(error => console.log(error));
+  document
+    .querySelector('.modal__button-youtube')
+    .addEventListener('click', renderTrailerYoutube);
+}
+
+function renderTrailerYoutube() {
+  const iframeMarkup = `
+    <iframe class="modal__iframe" src="https://www.youtube.com/embed/Wf_Zf5gEgHI" title="єВідрядження, податкова реформа та бронювання від мобілізації — DOU News #49" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    `;
+  document.querySelector('.modal-thumb').innerHTML = iframeMarkup;
+  document.querySelector('.drop-box').classList.remove('drop-box--is-hidden');
+  console.log(document.querySelector('.modal'));
 }
 
 export function closeModal() {
@@ -141,6 +167,7 @@ export function createModalCard(movie) {
   return `<img class="modal__img" src="${createImg(
     movie.poster_path
   )}" alt="" width="240">
+                <button class="modal__button-youtube is-hidden">Trailer</button>
                 <div class="modal__description-thumb">
                     <h2 class="modal__title">${movie.title}</h2>
                     <ul class="movie-data">
@@ -196,7 +223,3 @@ export function createModalCard(movie) {
 function createModalGenresString(genres) {
   return genres.map(genre => genre.name).join(', ');
 }
-
-
-
-

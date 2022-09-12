@@ -1,6 +1,5 @@
-
 import { genres } from '../genres.json';
-import { showModal, closeModal } from './fb-film-modal';
+import { showModal, closeModal, renderTrailer } from './fb-film-modal';
 
 export const API_URL = 'https://api.themoviedb.org/3/';
 export const API_KEY = 'afc22cf5c573169849cabd6217d3b7d3';
@@ -38,10 +37,19 @@ document.addEventListener('keydown', e => {
   }
 });
 document.querySelector('.drop-box').addEventListener('click', e => {
-  if (!document.querySelector('.modal').contains(e.target)) {
+  if (
+    !document.querySelector('.modal').contains(e.target) &&
+    document.querySelector('.modal__button-youtube')
+  ) {
+    closeModal();
+  } else if (
+    !document.querySelector('.modal').contains(e.target) &&
+    e.target === null
+  ) {
     closeModal();
   }
 });
+
 arrowLeftBtn.addEventListener('click', () => {
   if (pageNumber <= 1) {
     return;
