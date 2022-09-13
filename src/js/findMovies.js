@@ -1,4 +1,6 @@
 
+import { stringify } from '@firebase/util';
+import { query } from 'firebase/firestore/lite';
 import { genres } from '../genres.json';
 import { showModal, closeModal } from './fb-film-modal';
 
@@ -8,6 +10,8 @@ let requestMovie = '';
 let pageNumber = 1;
 let totalPages = 1;
 let searchingFlag = false;
+let formData = {};
+
 
 const inputEl = document.querySelector('.header__input');
 const searchButtonEl = document.querySelector('.search-btn');
@@ -21,12 +25,19 @@ const arrowRightBtn = document.querySelector('.pagination-btn__arrow-right');
 const paginationNumbers = document.querySelector('.pagination-list');
 const pagination = document.querySelector('.pagination');
 const loadSpinner = document.querySelector('.loader');
+const filmoteka = document.querySelector('.logo');
+getCurentPageFunction();
 
 formEl.addEventListener('submit', e => {
   e.preventDefault();
 });
 
+
 showMovies(createCurrentUrl(pageNumber));
+
+filmoteka.addEventListener('click', () => {
+  sessionStorage.removeItem("current-page");
+});
 
 searchButtonEl.addEventListener('click', loadMovies);
 inputEl.addEventListener('input', serchingParametr);
@@ -93,7 +104,8 @@ function showMovies(url) {
     .then(response => response.json())
     .then(movies => {
       console.log(movies);
-
+      
+      setCurentPageFunction(pageNumber, requestMovie);
       checkforNotFoundNotification(
         movies.results === undefined || movies.results.length < 1
       );
@@ -109,6 +121,32 @@ function showMovies(url) {
     })
     .catch(error => console.log(error));
 }
+
+function setCurentPageFunction(pageNumber, requestMovie) {
+  console.log(pageNumber);
+   console.log(requestMovie);
+  formData = {};
+  formData[pageNumber] = pageNumber;
+  formData[requestMovie] = requestMovie;
+  console.log(formData);
+      sessionStorage.setItem("current-page", JSON.stringify(formData));
+}
+
+function getCurentPageFunction() {
+  const savedCurrentPage = sessionStorage.getItem("current-page");
+  
+  const parseSavedData = JSON.parse(savedCurrentPage);
+  console.log(savedCurrentPage);
+  console.log(parseSavedData);
+  if (parseSavedData) {
+    pageNumber = pageNumber;
+    requestMovie = requestMovie;
+    console.log(requestMovie);
+    console.log(pageNumber);
+    return;
+}
+ 
+};
 
 function serchingParametr(e) {
   requestMovie = e.currentTarget.value;
