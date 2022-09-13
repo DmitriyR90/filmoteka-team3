@@ -41,7 +41,7 @@ export async function showModal(e) {
   await fetch(url)
     .then(response => response.json())
     .then(movie => {
-      
+      onShowPlayer(movie);
       document
       .querySelector('.modal-thumb')
       .insertAdjacentHTML('beforeend', createModalCard(movie));
@@ -308,4 +308,45 @@ function createModalGenresString(genres) {
   return genres.map(genre => genre.name).join(', ');
 }
 
+let QUERY ='';
+async function onShowPlayer(movie) {
+  console.log(movie);
+  await fetch(
+    `https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=afc22cf5c573169849cabd6217d3b7d3&language=en-US`
+  )
+    .then(response => response.json())
+    .then(items => {
+      console.log(items)
+      for (const item of items.results) {
+        console.log(item);
+        if (
+          item.site === 'YouTube' &&
+          item.name === 'Official Trailer' ||
+          item.name === 'Teaser Trailer'
+        ) {
+          QUERY = item.key;
+          console.log(item.name);
+          player.insertAdjacentHTML('beforeend', parsPlayer(QUERY));
+        }
+        }
+    });
+}
+const player = document.querySelector('.modal-thumb');
+const imgRef = document.querySelector('modal__img');
+const youtube = document.querySelector('.youtube');
 
+function parsPlayer(QUERY) {
+  return `<div class="youtube is-hidden__spinner">
+  <iframe class="video"
+      id="ytplayer"
+      type="text/html"
+      width="640"
+      height="360"
+      src="http://www.youtube.com/embed/${QUERY}?autoplay=1"
+      frameborder="0"
+    />
+  </div>`;  
+}
+
+
+  // youtube.classList.remove('.is-hidden__spinner');

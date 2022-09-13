@@ -156,6 +156,7 @@
     
 }
 
+
 .add-queue-btn {    
     border: 1px solid #000000;
     color: #000000;
@@ -207,7 +208,10 @@
         width: 375px;
         height: 478px;
     }
-
+    
+   .modal__img:hover {
+    opacity: 1;       
+        }
     .modal__title {        
         font-size: 30px;
         line-height: 1.17;
@@ -230,3 +234,9 @@ body.overflow-hidden {
 .delete {
     height: 50px;
 }
+.youtube {
+    display: flex;
+    position: absolute;
+}
+
+
