@@ -10,7 +10,12 @@ let requestMovie = '';
 let pageNumber = 1;
 let totalPages = 1;
 let searchingFlag = false;
-let formData = {};
+let formData = {
+  'page': 1,
+  'query': '',
+  'currenturl': '',
+};
+// getCurentPageFunction();
 
 
 const inputEl = document.querySelector('.header__input');
@@ -95,7 +100,9 @@ function loadMovies(e) {
     pageNumber = 1;
     searchingFlag = true;
     loadSpinner.classList.remove('is-hidden__spinner');
+    
     showMovies(createSearchingUrl(requestMovie, pageNumber));
+    
   }
 }
 
@@ -105,7 +112,8 @@ function showMovies(url) {
     .then(movies => {
       console.log(movies);
       
-      setCurentPageFunction(pageNumber, requestMovie);
+      setCurentPageFunction(requestMovie, pageNumber);
+      
       checkforNotFoundNotification(
         movies.results === undefined || movies.results.length < 1
       );
@@ -122,34 +130,39 @@ function showMovies(url) {
     .catch(error => console.log(error));
 }
 
-function setCurentPageFunction(pageNumber, requestMovie) {
-  console.log(pageNumber);
-   console.log(requestMovie);
+function setCurentPageFunction(requestMovie, pageNumber) {
   formData = {};
-  formData[pageNumber] = pageNumber;
-  formData[requestMovie] = requestMovie;
-  console.log(formData);
-      sessionStorage.setItem("current-page", JSON.stringify(formData));
-}
+  formData.query = requestMovie;
+  formData.page = pageNumber;
+   
+  sessionStorage.setItem("current-page", JSON.stringify(formData));
+  getCurentPageFunction();
+
+};
 
 function getCurentPageFunction() {
   const savedCurrentPage = sessionStorage.getItem("current-page");
-  
   const parseSavedData = JSON.parse(savedCurrentPage);
-  console.log(savedCurrentPage);
+  // console.log(savedCurrentPage);
   console.log(parseSavedData);
   if (parseSavedData) {
-    pageNumber = pageNumber;
-    requestMovie = requestMovie;
-    console.log(requestMovie);
-    console.log(pageNumber);
-    return;
-}
+    pageNumber = parseSavedData.page;
+   
+  console.log(pageNumber);
+     if (parseSavedData.query !== '') {
+       requestMovie = parseSavedData.query;
+        console.log(requestMovie);
+    }
+  }
  
 };
+ console.log(requestMovie);
+  console.log(pageNumber); 
 
 function serchingParametr(e) {
+   
   requestMovie = e.currentTarget.value;
+ 
 }
 
 function createMoviesList(movies) {
